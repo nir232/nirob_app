@@ -1,0 +1,58 @@
+# Render Blueprint for the existing GrandStay Hotel Booking application.
+# The web service runs the existing PHP/Apache application.
+# The MySQL service is private and uses a persistent disk.
+services:
+  - type: pserv
+    name: grandstay-mysql
+    runtime: image
+    image:
+      url: docker.io/library/mysql:8.0
+    plan: starter
+    region: singapore
+    envVars:
+      - key: MYSQL_DATABASE
+        value: hotel_booking
+      - key: MYSQL_USER
+        value: hoteluser
+      - key: MYSQL_PASSWORD
+        generateValue: true
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
+    disk:
+      name: mysql-data
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+
+  - type: web
+    name: grandstay-hotel-booking
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /home.php
+    envVars:
+      - key: DB_HOST
+        fromService:
+          name: grandstay-mysql
+          type: pserv
+          property: host
+      - key: DB_USER
+        value: hoteluser
+      - key: DB_PASS
+        fromService:
+          name: grandstay-mysql
+          type: pserv
+          envVarKey: MYSQL_PASSWORD
+      - key: DB_NAME
+        value: hotel_booking
+      - key: MANAGER_USERNAME
+        value: manager1
+      - key: MANAGER_PASSWORD
+        sync: false
+      - key: MANAGER_NAME
+        value: Hotel Manager
+      - key: MANAGER_EMAIL
+        sync: false
+      - key: MANAGER_PHONE
+        sync: false

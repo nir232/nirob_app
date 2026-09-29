@@ -1,0 +1,29 @@
+HOTEL_BOOK - LOCAL PC TESTING
+
+Requirements:
+- XAMPP (Apache + MySQL)
+- PHP 8.x (included with XAMPP)
+
+1. Extract the hotel_Book folder into:
+   C:\xampp\htdocs\hotel_Book
+
+2. Start Apache and MySQL in XAMPP.
+
+3. Open phpMyAdmin:
+   http://localhost/phpmyadmin/
+
+4. Create a database named:
+   hotel_booking
+
+5. Import:
+   hotel_Book/database.sql
+
+6. Open:
+   http://localhost/hotel_Book/
+
+Manager test account:
+   Username: manager1
+   Password: manager123
+
+The database.sql file now creates the manager account automatically.
+The rest of the existing application files and functionality are unchanged.
